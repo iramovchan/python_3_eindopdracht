@@ -1,0 +1,3 @@
+brood 2
+appel 3
+melk 3
