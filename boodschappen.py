@@ -3,9 +3,20 @@ producten = {}
 
 def load_list():
     lijst = open('producten.txt', 'r')
+    val = ""
+    key = ""
     for line in lijst:
-       key, val = line.split()
-       producten[key] = val
+        for charac in line:
+            if charac.isdigit():
+                val = val + charac
+            elif charac == "\n":
+                break
+            elif charac.isalpha():
+                key = key + charac
+
+        producten[key] = val
+        val = ""
+        key = ""
     lijst.close()
     return producten
 
@@ -17,6 +28,31 @@ def update_list():
         to_print = to_print + key + " " + value + "\n"
     lijst.write(to_print)
     lijst.close()
+
+
+def boodschappen_lijst():
+    koop_lijst = []
+
+    stop = False
+    print("Wat wilt u kopen? (stop als u klaar bent)")
+
+    while not stop:
+
+        product_lijst = input()
+
+        if product_lijst.lower() == "stop":
+            stop = True
+        else:
+            koop_lijst.append(product_lijst)
+    return koop_lijst
+
+
+def te_betalen(koop_lijst):
+    te_betalen = 0
+
+    for i in koop_lijst:
+        te_betalen += int(producten[i])
+    print("Te betalen: ", te_betalen)
 
 
 def menu():
@@ -58,25 +94,7 @@ def program(producten):
             producten[gewijzigde_product] = nieuw_prijs
 
         elif optie == "5":
-            koop_lijst = []
-
-            stop = False
-            print("Wat wilt u kopen? (stop als u klaar bent)")
-
-            while not stop:
-
-                product_lijst = input()
-
-                if product_lijst.lower() == "stop":
-                    stop = True
-                else:
-                    koop_lijst.append(product_lijst)
-
-            te_betalen = 0
-
-            for i in koop_lijst:
-                te_betalen += int(producten[i])
-            print("Te betalen: ", te_betalen)
+            te_betalen(boodschappen_lijst())
 
         elif optie == "6":
             update_list()
